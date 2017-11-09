@@ -1,0 +1,8 @@
+E:\Course\data communications\socket programming\Server\server\server\bin\Debug\server.exe.config
+E:\Course\data communications\socket programming\Server\server\server\bin\Debug\server.exe
+E:\Course\data communications\socket programming\Server\server\server\bin\Debug\server.pdb
+E:\Course\data communications\socket programming\Server\server\server\obj\Debug\server.csprojResolveAssemblyReference.cache
+E:\Course\data communications\socket programming\Server\server\server\obj\Debug\server.Properties.Resources.resources
+E:\Course\data communications\socket programming\Server\server\server\obj\Debug\server.csproj.GenerateResource.Cache
+E:\Course\data communications\socket programming\Server\server\server\obj\Debug\server.exe
+E:\Course\data communications\socket programming\Server\server\server\obj\Debug\server.pdb

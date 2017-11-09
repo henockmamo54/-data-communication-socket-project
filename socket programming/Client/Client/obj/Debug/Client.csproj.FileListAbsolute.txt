@@ -1,0 +1,7 @@
+E:\Course\data communications\socket programming\Client\Client\bin\Debug\Client.exe.config
+E:\Course\data communications\socket programming\Client\Client\bin\Debug\Client.exe
+E:\Course\data communications\socket programming\Client\Client\bin\Debug\Client.pdb
+E:\Course\data communications\socket programming\Client\Client\obj\Debug\Client.Properties.Resources.resources
+E:\Course\data communications\socket programming\Client\Client\obj\Debug\Client.csproj.GenerateResource.Cache
+E:\Course\data communications\socket programming\Client\Client\obj\Debug\Client.exe
+E:\Course\data communications\socket programming\Client\Client\obj\Debug\Client.pdb
