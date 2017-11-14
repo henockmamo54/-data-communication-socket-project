@@ -17,20 +17,46 @@ namespace server
         static byte[] Buffer { get; set; }
         static Socket sock;
         Socket acceptedSock;
+
+        //IPAddress myIP = IPAddress.Parse("117.17.157.125");
+        IPAddress myIP = IPAddress.Parse("127.0.0.1");
+        int myPort = 1234;
+
         public Form1()
         {
             InitializeComponent();
+            
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+           
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
             sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            sock.Bind(new IPEndPoint(0,1234));
+            sock.Bind(new IPEndPoint(myIP, myPort));
+
+            txtbox_serverMessage.Text += "Ther server is started at IP Adress: " + myIP + " Port : " + myPort + "\n";
+            txtbox_serverMessage.Text += "The server is listening ... \n";
+
+            this.Refresh();
+            this.Invalidate();
+
             sock.Listen(100);
 
             acceptedSock = sock.Accept();
+
+            txtbox_serverMessage.Text += "Client is connected\n";
+
             Buffer = new byte[acceptedSock.SendBufferSize];
             int bytesRead = acceptedSock.Receive(Buffer);
 
             byte[] formatted = new byte[bytesRead];
 
-            for (int i = 0; i < bytesRead; i++) {
+            for (int i = 0; i < bytesRead; i++)
+            {
                 formatted[i] = Buffer[i];
             }
 
@@ -39,7 +65,6 @@ namespace server
             Console.Read();
             sock.Close();
             acceptedSock.Close();
-
         }
     }
 }

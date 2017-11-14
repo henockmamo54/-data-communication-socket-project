@@ -16,12 +16,17 @@ namespace Client
     {
 
         static Socket sock;
+
+        //IPAddress serverIP = IPAddress.Parse("117.17.157.125");
+        IPAddress serverIP = IPAddress.Parse("127.0.0.1");
+        int serverPort = 1234;
+
         public Form1()
         {
             InitializeComponent();
 
             sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            IPEndPoint localEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 1234);
+            IPEndPoint localEndPoint = new IPEndPoint(serverIP, serverPort);
 
             try {
                 sock.Connect(localEndPoint);

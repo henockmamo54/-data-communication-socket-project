@@ -5,3 +5,12 @@ E:\Course\data communications\socket programming\Client\Client\obj\Debug\Client.
 E:\Course\data communications\socket programming\Client\Client\obj\Debug\Client.csproj.GenerateResource.Cache
 E:\Course\data communications\socket programming\Client\Client\obj\Debug\Client.exe
 E:\Course\data communications\socket programming\Client\Client\obj\Debug\Client.pdb
+E:\Course\data communications\-data-communication-socket-project\socket programming\Client\Client\bin\Debug\Client.exe.config
+E:\Course\data communications\-data-communication-socket-project\socket programming\Client\Client\obj\Debug\Client.exe
+E:\Course\data communications\-data-communication-socket-project\socket programming\Client\Client\obj\Debug\Client.pdb
+E:\Course\data communications\-data-communication-socket-project\socket programming\Client\Client\bin\Debug\Client.exe
+E:\Course\data communications\-data-communication-socket-project\socket programming\Client\Client\bin\Debug\Client.pdb
+E:\Course\data communications\-data-communication-socket-project\socket programming\Client\Client\obj\Debug\Client.csprojResolveAssemblyReference.cache
+E:\Course\data communications\-data-communication-socket-project\socket programming\Client\Client\obj\Debug\Client.Form1.resources
+E:\Course\data communications\-data-communication-socket-project\socket programming\Client\Client\obj\Debug\Client.Properties.Resources.resources
+E:\Course\data communications\-data-communication-socket-project\socket programming\Client\Client\obj\Debug\Client.csproj.GenerateResource.Cache
