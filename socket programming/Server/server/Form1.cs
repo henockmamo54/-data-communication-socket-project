@@ -75,24 +75,35 @@ namespace server
         {
             while (true)
             {
-                Buffer = new byte[acceptedSock.SendBufferSize];
-                int bytesRead = acceptedSock.Receive(Buffer);
-
-                byte[] formatted = new byte[bytesRead];
-
-                for (int i = 0; i < bytesRead; i++)
+                try
                 {
-                    formatted[i] = Buffer[i];
-                }
+                    Buffer = new byte[acceptedSock.SendBufferSize];
+                    int bytesRead = acceptedSock.Receive(Buffer);
 
-                string strData = Encoding.ASCII.GetString(formatted);
-                Console.Write(strData + "\r\n");
-                Console.Read();
-                
-                conversation += "Client: " + strData + Environment.NewLine;
-                this.Invoke(new MethodInvoker(delegate {
-                    txt_conversationHistory.Text = conversation;
-                }));
+                    byte[] formatted = new byte[bytesRead];
+
+                    for (int i = 0; i < bytesRead; i++)
+                    {
+                        formatted[i] = Buffer[i];
+                    }
+
+                    string strData = Encoding.ASCII.GetString(formatted);
+                    Console.Write(strData + "\r\n");
+                    Console.Read();
+
+                    //conversation += "Client: " + strData + Environment.NewLine;
+                    //this.Invoke(new MethodInvoker(delegate {
+                    //    txt_conversationHistory.Text = conversation;
+                    //}));
+
+                    conversation += @"<div style='color: cornflowerblue;font-size: 12px;font-family: cursive; margin: 0px; padding: 0px;'  align='left'><b> C: </b>" + strData + " </div>";
+                    this.Invoke(new MethodInvoker(delegate
+                    {
+                        webBrowser1.DocumentText = conversation;
+                    }));
+                }
+                catch (Exception e) { }
+
             }
         }
 
@@ -101,8 +112,10 @@ namespace server
             byte[] data = Encoding.ASCII.GetBytes(txt_msg.Text);
             acceptedSock.Send(data);
 
-            conversation += "Server: " + txt_msg.Text + Environment.NewLine;
-            txt_conversationHistory.Text = conversation;
+            //conversation += "Server: " + txt_msg.Text + Environment.NewLine;
+            //txt_conversationHistory.Text = conversation;
+            conversation += @"<div style='color: forestgreen;font-size: 12px;font-family: cursive;margin: 0px; padding: 0px;' align='right'><b> S: </b>" + txt_msg.Text + " </div>";
+            webBrowser1.DocumentText = conversation;
             txt_msg.Text = "";
         }
 

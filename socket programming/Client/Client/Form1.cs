@@ -15,7 +15,6 @@ namespace Client
 {
     public partial class Form1 : Form
     {
-
         static Socket sock;
 
         //IPAddress serverIP = IPAddress.Parse("117.17.157.125");
@@ -35,6 +34,8 @@ namespace Client
                 sock.Connect(localEndPoint);
                 byte[] data = Encoding.ASCII.GetBytes("Client one is connected");
                 sock.Send(data);
+
+                lbl_connected.Text = "Client is connected to " + "127.0.0.1" + " & Port: "+ serverPort;
             }
             catch (Exception) {
                 Console.Write("unable to connect");
@@ -43,7 +44,7 @@ namespace Client
 
             Thread t = new Thread(listenForMessage);
             t.Start();
-            txt_conversationHistory.Text = conversation;
+            //txt_conversationHistory.Text = conversation;
         }
 
 
@@ -51,24 +52,29 @@ namespace Client
         {
             while (true)
             {
-                byte[] Buffer = new byte[sock.ReceiveBufferSize];
-                int bytesRead = sock.Receive(Buffer);
-
-                byte[] formatted = new byte[bytesRead];
-
-                for (int i = 0; i < bytesRead; i++)
+                try
                 {
-                    formatted[i] = Buffer[i];
+                    byte[] Buffer = new byte[sock.ReceiveBufferSize];
+                    int bytesRead = sock.Receive(Buffer);
+
+                    byte[] formatted = new byte[bytesRead];
+
+                    for (int i = 0; i < bytesRead; i++)
+                    {
+                        formatted[i] = Buffer[i];
+                    }
+
+                    string strData = Encoding.ASCII.GetString(formatted);
+                    Console.Write(strData + "\r\n");
+                    Console.Read();
+
+                    conversation += @"<div style='color: cornflowerblue;font-size: 12px;font-family: cursive; margin: 0px; padding: 0px;'  align='left'><b> S: </b>" + strData + " </div>";
+                    this.Invoke(new MethodInvoker(delegate
+                    {
+                        webBrowser1.DocumentText = conversation;
+                    }));
                 }
-
-                string strData = Encoding.ASCII.GetString(formatted);
-                Console.Write(strData + "\r\n");
-                Console.Read();
-
-                conversation += "Server: "+ strData + Environment.NewLine;
-                this.Invoke(new MethodInvoker(delegate {
-                    txt_conversationHistory.Text = conversation;
-                }));
+                catch (Exception e) { }
             }
         }
 
@@ -78,8 +84,8 @@ namespace Client
             byte[] data = Encoding.ASCII.GetBytes(txt_message.Text);
             sock.Send(data);
 
-            conversation += "Client: "+ txt_message.Text + Environment.NewLine;
-            txt_conversationHistory.Text = conversation;
+            conversation += @"<div style='color: forestgreen;font-size: 12px;font-family: cursive;margin: 0px; padding: 0px;' align='right'><b> C: </b>" + txt_message.Text + " </div>";
+            webBrowser1.DocumentText = conversation;
             txt_message.Text = "";
            
         }
