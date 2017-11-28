@@ -15,46 +15,45 @@ namespace Client
 {
     public partial class Form1 : Form
     {
-        static Socket sock;
+        Socket sock;
 
         //IPAddress serverIP = IPAddress.Parse("117.17.157.125");
         IPAddress serverIP = IPAddress.Parse("127.0.0.1");
         int serverPort = 1234;
 
         string conversation = "";
+        IPEndPoint localEndPoint;
+
+        UdpClient listener;
 
         public Form1()
         {
             InitializeComponent();
+            localEndPoint = new IPEndPoint(serverIP, serverPort);
 
-            sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            IPEndPoint localEndPoint = new IPEndPoint(serverIP, serverPort);
+            sock = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+            sock.Connect(localEndPoint);
 
-            try {
-                sock.Connect(localEndPoint);
-                byte[] data = Encoding.ASCII.GetBytes("Client one is connected");
-                sock.Send(data);
-
-                lbl_connected.Text = "Client is connected to " + "127.0.0.1" + " & Port: "+ serverPort;
-            }
-            catch (Exception) {
-                Console.Write("unable to connect");
-                
-            }
+            listener = new UdpClient(serverPort);
+            IPEndPoint groupEP = new IPEndPoint(IPAddress.Any, serverPort);
 
             Thread t = new Thread(listenForMessage);
             t.Start();
-            //txt_conversationHistory.Text = conversation;
+
+            Thread tt = new Thread(listenForMessage);
+            tt.Start();
         }
 
 
         private void listenForMessage()
         {
+            IPEndPoint RemoteIpEndPoint = new IPEndPoint(IPAddress.Any, serverPort);
+
             while (true)
             {
                 try
                 {
-                    byte[] Buffer = new byte[sock.ReceiveBufferSize];
+                    byte[] Buffer = listener.Receive(ref RemoteIpEndPoint); // new byte[sock.SendBufferSize];
                     int bytesRead = sock.Receive(Buffer);
 
                     byte[] formatted = new byte[bytesRead];
@@ -74,7 +73,9 @@ namespace Client
                         webBrowser1.DocumentText = conversation;
                     }));
                 }
-                catch (Exception e) { }
+                catch (Exception e) {
+                    Console.WriteLine("Henock " + e.Message);
+                }
             }
         }
 
@@ -82,7 +83,7 @@ namespace Client
         {
 
             byte[] data = Encoding.ASCII.GetBytes(txt_message.Text);
-            sock.Send(data);
+            sock.SendTo(data,localEndPoint);
 
             conversation += @"<div style='color: forestgreen;font-size: 12px;font-family: cursive;margin: 0px; padding: 0px;' align='right'><b> C: </b>" + txt_message.Text + " </div>";
             webBrowser1.DocumentText = conversation;

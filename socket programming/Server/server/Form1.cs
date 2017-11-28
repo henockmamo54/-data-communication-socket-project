@@ -17,17 +17,17 @@ namespace server
     {
         static byte[] Buffer { get; set; }
         static Socket sock;
-        Socket acceptedSock;
         string conversation="";
 
         //IPAddress myIP = IPAddress.Parse("117.17.157.125");
         IPAddress myIP = IPAddress.Parse("127.0.0.1");
         int myPort = 1234;
+        IPEndPoint myEndPoint;
 
         public Form1()
         {
             InitializeComponent();
-            
+            myEndPoint = new IPEndPoint(myIP, myPort);
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -37,34 +37,14 @@ namespace server
 
         private void button1_Click(object sender, EventArgs e)
         {
-            sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            sock.Bind(new IPEndPoint(myIP, myPort));
+            sock = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+            sock.Bind(myEndPoint);
 
             txtbox_serverMessage.Text += "Ther server is started at IP Adress: " + myIP + " Port : " + myPort + "\n";
-            txtbox_serverMessage.Text += "The server is listening ... \n";
 
             this.Refresh();
             this.Invalidate();
-
-            sock.Listen(100);
-
-            acceptedSock = sock.Accept();
-
-            txtbox_serverMessage.Text += "Client is connected\n";
-
-            Buffer = new byte[acceptedSock.SendBufferSize];
-            int bytesRead = acceptedSock.Receive(Buffer);
-
-            byte[] formatted = new byte[bytesRead];
-
-            for (int i = 0; i < bytesRead; i++)
-            {
-                formatted[i] = Buffer[i];
-            }
-
-            string strData = Encoding.ASCII.GetString(formatted);
-            Console.Write(strData + "\r\n");
-            Console.Read();
+                        
 
             Thread t = new Thread(listenForMessage);
             t.Start();
@@ -77,8 +57,8 @@ namespace server
             {
                 try
                 {
-                    Buffer = new byte[acceptedSock.SendBufferSize];
-                    int bytesRead = acceptedSock.Receive(Buffer);
+                    Buffer = new byte[sock.SendBufferSize];
+                    int bytesRead = sock.Receive(Buffer);
 
                     byte[] formatted = new byte[bytesRead];
 
@@ -90,11 +70,7 @@ namespace server
                     string strData = Encoding.ASCII.GetString(formatted);
                     Console.Write(strData + "\r\n");
                     Console.Read();
-
-                    //conversation += "Client: " + strData + Environment.NewLine;
-                    //this.Invoke(new MethodInvoker(delegate {
-                    //    txt_conversationHistory.Text = conversation;
-                    //}));
+                    
 
                     conversation += @"<div style='color: cornflowerblue;font-size: 12px;font-family: cursive; margin: 0px; padding: 0px;'  align='left'><b> C: </b>" + strData + " </div>";
                     this.Invoke(new MethodInvoker(delegate
@@ -110,10 +86,8 @@ namespace server
         private void btn_send_Click(object sender, EventArgs e)
         {
             byte[] data = Encoding.ASCII.GetBytes(txt_msg.Text);
-            acceptedSock.Send(data);
-
-            //conversation += "Server: " + txt_msg.Text + Environment.NewLine;
-            //txt_conversationHistory.Text = conversation;
+            sock.SendTo(data, myEndPoint);
+            
             conversation += @"<div style='color: forestgreen;font-size: 12px;font-family: cursive;margin: 0px; padding: 0px;' align='right'><b> S: </b>" + txt_msg.Text + " </div>";
             webBrowser1.DocumentText = conversation;
             txt_msg.Text = "";
@@ -122,7 +96,6 @@ namespace server
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             sock.Close();
-            acceptedSock.Close();
         }
 
         private void txt_msg_KeyDown(object sender, KeyEventArgs e)
